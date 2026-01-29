@@ -87,10 +87,10 @@
             try {
                 // Create DataManager for remote API
                 const dataManager = new ej.data.DataManager({
-                    url: "{{ url('/api/students/read') }}",
-                    insertUrl: "{{ url('/api/students/create') }}",
-                    updateUrl: "{{ url('/api/students/update') }}",
-                    removeUrl: "{{ url('/api/students/remove') }}",
+                    url: "{{ url('/api/read') }}",
+                    insertUrl: "{{ url('/api/create') }}",
+                    updateUrl: "{{ url('/api/update') }}",
+                    removeUrl: "{{ url('/api/remove') }}",
                     adaptor: new ej.data.UrlAdaptor(),
                     headers: [
                         { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
