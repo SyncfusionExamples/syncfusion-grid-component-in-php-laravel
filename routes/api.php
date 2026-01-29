@@ -13,6 +13,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Syncfusion DataManager UrlAdaptor Routes
 // ==========================================
 Route::post('/read', [ServerController::class, 'read']);            // Read/Query
-Route::post('/create', [ServerController::class, 'insert']);        // Insert
+Route::post('/insert', [ServerController::class, 'insert']);        // Insert
 Route::post('/update', [ServerController::class, 'update']);        // Update
 Route::post('/remove', [ServerController::class, 'remove']);        // Delete

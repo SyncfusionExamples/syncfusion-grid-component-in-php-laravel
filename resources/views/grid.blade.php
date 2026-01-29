@@ -88,7 +88,7 @@
                 // Create DataManager for remote API
                 const dataManager = new ej.data.DataManager({
                     url: "{{ url('/api/read') }}",
-                    insertUrl: "{{ url('/api/create') }}",
+                    insertUrl: "{{ url('/api/insert') }}",
                     updateUrl: "{{ url('/api/update') }}",
                     removeUrl: "{{ url('/api/remove') }}",
                     adaptor: new ej.data.UrlAdaptor(),
@@ -121,7 +121,6 @@
                             field: 'StudentID',
                             headerText: 'Student ID',
                             width: 120,
-                            textAlign: 'Right',
                             isPrimaryKey: true,
                             allowEditing: false
                         },
