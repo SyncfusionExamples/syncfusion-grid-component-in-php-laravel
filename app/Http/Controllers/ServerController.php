@@ -170,13 +170,37 @@ class ServerController extends Controller
                 $q->$method($field, '<=', $value);
                 break;
             case 'contains':
-                $this->applyLikeOperator($q, $method, $field, '%' . $value . '%', $ignoreCase);
+                if ($ignoreCase) {
+                    if ($method === 'orWhere') {
+                        $q->orWhereRaw("LOWER($field) LIKE ?", [mb_strtolower('%' . $value . '%')]);
+                    } else {
+                        $q->whereRaw("LOWER($field) LIKE ?", [mb_strtolower('%' . $value . '%')]);
+                    }
+                } else {
+                    $q->$method($field, 'LIKE', '%' . $value . '%');
+                }
                 break;
             case 'startswith':
-                $this->applyLikeOperator($q, $method, $field, $value . '%', $ignoreCase);
+                if ($ignoreCase) {
+                    if ($method === 'orWhere') {
+                        $q->orWhereRaw("LOWER($field) LIKE ?", [mb_strtolower($value . '%')]);
+                    } else {
+                        $q->whereRaw("LOWER($field) LIKE ?", [mb_strtolower($value . '%')]);
+                    }
+                } else {
+                    $q->$method($field, 'LIKE', $value . '%');
+                }
                 break;
             case 'endswith':
-                $this->applyLikeOperator($q, $method, $field, '%' . $value, $ignoreCase);
+                if ($ignoreCase) {
+                    if ($method === 'orWhere') {
+                        $q->orWhereRaw("LOWER($field) LIKE ?", [mb_strtolower('%' . $value)]);
+                    } else {
+                        $q->whereRaw("LOWER($field) LIKE ?", [mb_strtolower('%' . $value)]);
+                    }
+                } else {
+                    $q->$method($field, 'LIKE', '%' . $value);
+                }
                 break;
             case 'in':
                 $methodName = $method . 'In';
@@ -197,21 +221,7 @@ class ServerController extends Controller
         }
     }
 
-    /**
-     * Apply LIKE operator with case sensitivity
-     */
-    private function applyLikeOperator($q, $method, $field, $likeVal, $ignoreCase)
-    {
-        if ($ignoreCase) {
-            if ($method === 'orWhere') {
-                $q->orWhereRaw("LOWER($field) LIKE ?", [mb_strtolower($likeVal)]);
-            } else {
-                $q->whereRaw("LOWER($field) LIKE ?", [mb_strtolower($likeVal)]);
-            }
-        } else {
-            $q->$method($field, 'LIKE', $likeVal);
-        }
-    }
+
 
     /**
      * Apply quick SEARCH filters
@@ -232,7 +242,15 @@ class ServerController extends Controller
                     $method = $i === 0 ? 'where' : 'orWhere';
                     
                     if ($operator === 'contains') {
-                        $this->applyLikeOperator($q, $method, $field, '%' . $key . '%', $ignoreCase);
+                        if ($ignoreCase) {
+                            if ($method === 'orWhere') {
+                                $q->orWhereRaw("LOWER($field) LIKE ?", [mb_strtolower('%' . $key . '%')]);
+                            } else {
+                                $q->whereRaw("LOWER($field) LIKE ?", [mb_strtolower('%' . $key . '%')]);
+                            }
+                        } else {
+                            $q->$method($field, 'LIKE', '%' . $key . '%');
+                        }
                     } else {
                         $q->$method($field, '=', $key);
                     }
